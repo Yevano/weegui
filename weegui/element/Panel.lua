@@ -9,8 +9,8 @@
 function Panel:init(parent, x, y, w, h, bg, fg)
     Container.init(self, parent, x, y, w, h)
     self.children = Array.new()
-    self.bg = bg or Color.WHITE
-    self.fg = fg or Color.BLACK
+    self.bg = bg or Color.BLACK
+    self.fg = fg or Color.WHITE
 end
 
 function Panel:paint(ctx)

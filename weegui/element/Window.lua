@@ -53,4 +53,5 @@ function Window:removeOnClose()
     self.closeButton:addListener(Element.CLICK, function(button, x, y)
         self:remove()
     end)
+    return self
 end

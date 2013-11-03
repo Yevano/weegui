@@ -50,6 +50,10 @@ function Container:onDrag(button, x, y, dx, dy)
 end
 
 function Container:focus(child)
+    local unfocused = self.children[1]
+    if unfocused == child then return end
+    unfocused:callListeners(Element.UNFOCUS)
+    child:callListeners(Element.FOCUS)
     local index = self.children:indexOf(child)
     if not index then return end
     self.children:remove(index)
@@ -60,6 +64,7 @@ function Container:remove(child)
     if not child then
         Element.remove(self)
     else
+        child.parent = false
         self.children:remove(self.children:indexOf(child))
     end
 end

@@ -4,20 +4,22 @@
 Element.CLICK = "ElementClick"
 Element.DRAG  = "ElementDrag"
 Element.PAINT = "ElementPaint"
+Element.FOCUS = "ElementFocus"
+Element.UNFOCUS = "ElementUnfocus"
 
 function Element:init(parent, x, y, w, h)
     if not GuiManager.instance then
         GuiManager.new()
     end
 
-    if not parent then
-        parent = GuiManager.instance.basePanel
+    if parent == nil then
+        self.parent = GuiManager.instance.basePanel
+    elseif parent then
+        self.parent = parent
     end
 
-    self.parent = parent
-
-    if parent then
-    	parent:add(self)
+    if self.parent then
+        self.parent:add(self)
     end
 
     self.x = x
@@ -81,4 +83,12 @@ end
 
 function Element:remove()
     self.parent:remove(self)
+end
+
+function Element:getRelativeX(element)
+    return self.parent == element and self.x or (self.parent:getRelativeX(element) + self.x - 1)
+end
+
+function Element:getRelativeY(element)
+    return self.parent == element and self.y or (self.parent:getRelativeY(element) + self.y - 1)
 end

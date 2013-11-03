@@ -23,7 +23,7 @@ function GuiManager:init()
     self.uiImage = Image.new(self.monitorSize.x, self.monitorSize.y)
     self.uiCtx = ImageDrawContext.new(self.uiImage)
 
-    self.basePanel = Panel.new(nil, 1, 1, self.monitorSize.x, self.monitorSize.y, Color.BLUE)
+    self.basePanel = Panel.new(nil, 1, 1, self.monitorSize.x, self.monitorSize.y, Color.BLACK)
 
     self.paintThread = Thread.new(function()
         while self.running do
