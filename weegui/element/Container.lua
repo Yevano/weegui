@@ -1,4 +1,5 @@
---@import weegui.concurrent.GuiManager
+--@import weegui.util.GuiManager
+
 --@import weegui.element.Element
 --@import weegui.graphics.ImageDrawContext
 
@@ -7,9 +8,16 @@
 function Container:init(parent, x, y, w, h)
     Element.init(self, parent, x, y, w, h)
     self.children = Array.new()
+
+    self:addListener(Element.UNFOCUS, function()
+        if self.children:length() > 0 then
+            self.children[1]:callListeners(Element.UNFOCUS)
+        end
+    end)
 end
 
 function Container:add(element)
+    element.parent = self
     self.children:add(element)
 end
 
@@ -19,7 +27,10 @@ function Container:paint(ctx)
             local childCtx = ImageDrawContext.new(child.drawBuffer)
             child:paint(childCtx)
         end
-        ctx:drawImage(child.x, child.y, child.drawBuffer)
+
+        if child.visible then
+            ctx:drawImage(child.x, child.y, child.drawBuffer)
+        end
     end
     Element.paint(self, ctx)
 end
@@ -30,10 +41,10 @@ end
 
 function Container:onClick(button, x, y)
     for child in self.children:iAll() do
-        if child:contains(x, y) then
-            child:onClick(button, x - child.x + 1, y - child.y + 1)
+        if child.visible and child:contains(x, y) then
             self.dragging = child
             self:focus(child)
+            child:onClick(button, x - child.x + 1, y - child.y + 1)
             break
         end
     end
@@ -42,7 +53,7 @@ end
 
 function Container:onDrag(button, x, y, dx, dy)
     for child in self.children:iAll() do
-        if child:contains(x, y) and self.dragging == child then
+        if child.visible and child:contains(x, y) and self.dragging == child then
             child:onDrag(button, x - child.x + 1, y - child.y + 1, dx, dy)
         end
     end
@@ -50,14 +61,18 @@ function Container:onDrag(button, x, y, dx, dy)
 end
 
 function Container:focus(child)
-    local unfocused = self.children[1]
+    local unfocused
+    for child in self.children:iAll() do
+        unfocused = child
+        if not unfocused.alwaysOnTop then break end
+    end
     if unfocused == child then return end
     unfocused:callListeners(Element.UNFOCUS)
     child:callListeners(Element.FOCUS)
     local index = self.children:indexOf(child)
     if not index then return end
     self.children:remove(index)
-    self.children:insert(1, child)
+    self.children:insert(self.children:indexOf(unfocused), child)
 end
 
 function Container:remove(child)

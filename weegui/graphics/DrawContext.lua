@@ -32,11 +32,11 @@ end
 function DrawContext:drawImage(x, y, image)
     for i = x, x + image.w - 1 do
         for j = y, y + image.h - 1 do
-            local pixel = image.buffer[i - x + 1][j - y + 1]
-            -- TODO: Add transparency.
-            self.char = pixel.char or " "
-            self.fg   = pixel.fg or Color.BLACK
-            self.bg   = pixel.bg or Color.WHITE
+            local col = image.buffer[i - x + 1]
+            local iy = (j - y + 1) * 3
+            self.char = col[iy] or " "
+            self.fg   = col[iy + 2] or Color.BLACK
+            self.bg   = col[iy + 1] or Color.WHITE
             self:setPixel(i + self.x - 1, j + self.y - 1)
         end
     end
