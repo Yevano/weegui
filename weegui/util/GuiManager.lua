@@ -2,7 +2,9 @@
 --@import see.io.Terminal
 --@import see.util.Color
 --@import see.concurrent.Thread
---@import see.event.impl.SignalEvent
+--@import see.event.impl.MousePressEvent
+--@import see.event.impl.MouseDragEvent
+--@import see.event.impl.KeyPressEvent
 
 --@import weegui.element.Panel
 --@import weegui.graphics.Image
@@ -11,7 +13,7 @@
 
 function GuiManager:init()
     if GuiManager.instance then
-        throw(RuntimeException.new("Cannot create more than one instance of weegui.concurrent.GuiManager."))
+        throw(RuntimeException:new("Cannot create more than one instance of weegui.concurrent.GuiManager."))
     end
 
     GuiManager.instance = self
@@ -19,13 +21,13 @@ function GuiManager:init()
     self.running = true
 
     self.monitorSize = Terminal.getSize()
-    self.monitorCtx = MonitorDrawContext.new()
-    self.uiImage = Image.new(self.monitorSize.x, self.monitorSize.y)
-    self.uiCtx = ImageDrawContext.new(self.uiImage)
+    self.monitorCtx = MonitorDrawContext:new()
+    self.uiImage = Image:new(self.monitorSize.x, self.monitorSize.y)
+    self.uiCtx = ImageDrawContext:new(self.uiImage)
 
-    self.basePanel = Panel.new(nil, 1, 1, self.monitorSize.x, self.monitorSize.y, Color.BLACK)
+    self.basePanel = Panel:new(nil, 1, 1, self.monitorSize.x, self.monitorSize.y, Color.BLACK)
 
-    self.paintThread = Thread.new(function()
+    self.paintThread = Thread:new(function()
         while self.running do
             self.basePanel:paint(self.uiCtx)
             self.monitorCtx:drawImage(1, 1, self.uiImage)
@@ -36,11 +38,11 @@ function GuiManager:init()
     end)
     self.paintThread:start()
 
-    self.eventThread = Thread.new(function()
+    self.eventThread = Thread:new(function()
         while self.running do
             local event
             try(function()
-                event = Events.pull("mouse_click", "mouse_drag", "key")
+                event = Events.pull(MousePressEvent, MouseDragEvent, KeyPressEvent)
             end, function() end)
 
             if event then
@@ -60,7 +62,7 @@ function GuiManager:init()
 end
 
 function GuiManager.stop()
-    Thread.new(function()
+    Thread:new(function()
         local self = GuiManager.instance
         self.running = false
         self.paintThread:interrupt()

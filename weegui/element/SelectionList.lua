@@ -7,13 +7,13 @@
 --@extends weegui.element.Container
 
 function SelectionList:init(parent, x, y, w, bg, fg, strings)
-    Container.init(self, parent, x, y, w, strings:length())
+    self:super(Container).init(parent, x, y, w, strings:length())
     self.bg = bg
     self.fg = fg
-    self.selected = Array.new()
+    self.selected = Array:new()
 
     for string in strings:iAll() do
-        local item = Label.new(self, 1, self.children:length() + 1, string, self.bg, self.fg)
+        local item = Label:new(self, 1, self.children:length() + 1, string, self.bg, self.fg)
         item:addListener(Element.CLICK, function(button, x, y)
             if self.selected:contains(item) then
                 self.selected:remove(self.selected:indexOf(item))
@@ -37,5 +37,5 @@ function SelectionList:paint(ctx)
         local len = self.children[i].text:length()
         ctx:drawRect(len + 1, i, self.w - len, 1)
     end
-    Container.paint(self, ctx)
+    self:super(Container).paint(ctx)
 end

@@ -6,8 +6,8 @@
 --@extends weegui.element.Element
 
 function Container:init(parent, x, y, w, h)
-    Element.init(self, parent, x, y, w, h)
-    self.children = Array.new()
+    self:super(Element).init(parent, x, y, w, h)
+    self.children = Array:new()
 
     self:addListener(Element.UNFOCUS, function()
         if self.children:length() > 0 then
@@ -24,7 +24,7 @@ end
 function Container:paint(ctx)
     for child in self.children:iRange(-1, 1) do
         if child.repaintf then
-            local childCtx = ImageDrawContext.new(child.drawBuffer)
+            local childCtx = ImageDrawContext:new(child.drawBuffer)
             child:paint(childCtx)
         end
 
@@ -32,11 +32,11 @@ function Container:paint(ctx)
             ctx:drawImage(child.x, child.y, child.drawBuffer)
         end
     end
-    Element.paint(self, ctx)
+    self:super(Element).paint(ctx)
 end
 
 function Container:resize(w, h)
-    Element.resize(self, w, h)
+    self:super(Element).resize(w, h)
 end
 
 function Container:onClick(button, x, y)
@@ -48,7 +48,7 @@ function Container:onClick(button, x, y)
             break
         end
     end
-    Element.onClick(self, button, x, y)
+    self:super(Element).onClick(button, x, y)
 end
 
 function Container:onDrag(button, x, y, dx, dy)
@@ -57,7 +57,7 @@ function Container:onDrag(button, x, y, dx, dy)
             child:onDrag(button, x - child.x + 1, y - child.y + 1, dx, dy)
         end
     end
-    Element.onDrag(self, button, x, y, dx, dy)
+    self:super(Element).onDrag(button, x, y, dx, dy)
 end
 
 function Container:focus(child)
@@ -77,7 +77,7 @@ end
 
 function Container:remove(child)
     if not child then
-        Element.remove(self)
+        self:super(Element).remove()
     else
         child.parent = false
         self.children:remove(self.children:indexOf(child))

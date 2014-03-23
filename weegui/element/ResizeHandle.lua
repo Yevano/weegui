@@ -5,7 +5,7 @@
 --@extends weegui.element.Element
 
 function ResizeHandle:init(parent, x, y)
-    Element.init(self, parent, x, y, 1, 1)
+    self:super(Element).init(parent, x, y, 1, 1)
     self:addListener(Element.DRAG, function(button, x, y, dx, dy)
         self.parent:resize(self.parent.w + dx, self.parent.h + dy)
     end)
@@ -16,5 +16,5 @@ function ResizeHandle:paint(ctx)
     ctx.fg = Color.WHITE
     ctx.char = "/"
     ctx:setPixel(1, 1)
-    Element.paint(self, ctx)
+    self:super(Element).paint(ctx)
 end

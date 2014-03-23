@@ -11,7 +11,7 @@
 --@extends weegui.element.Container
 
 function Menu:init(w, bg, fg)
-    Container.init(self, nil, 1, 1, w, 0)
+    self:super(Container).init(nil, 1, 1, w, 0)
     self.bg = bg
     self.fg = fg
 end
@@ -21,13 +21,13 @@ function Menu:addButton(string)
     self.h = self.h + 1
     self.drawBuffer:resize(self.w, self.h)
     self:repaint()
-    local button = MenuButton.new(self, self.children:length() + 1, self.w, string, self.bg, self.fg)
+    local button = MenuButton:new(self, self.children:length() + 1, self.w, string, self.bg, self.fg)
     button:setTextAlignment(Alignment.LEFT, Alignment.CENTER)
     return button
 end
 
 function Menu:addExpander(string)
-    --return MenuExpanderButton.new()
+    --return MenuExpanderButton:new()
 end
 
 function Menu:paint(ctx)
@@ -37,5 +37,5 @@ function Menu:paint(ctx)
         local len = self.children[i].text:length()
         ctx:drawRect(len + 1, i, self.w - len, 1)
     end
-    Container.paint(self, ctx)
+    self:super(Container).paint(ctx)
 end

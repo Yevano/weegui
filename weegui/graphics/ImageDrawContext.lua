@@ -5,7 +5,7 @@
 --@extends weegui.graphics.DrawContext
 
 function ImageDrawContext:init(image)
-    DrawContext.init(self)
+    self:super(DrawContext).init()
     self.image = image
 end
 
