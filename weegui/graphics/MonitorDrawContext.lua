@@ -6,7 +6,7 @@
 --@extends weegui.graphics.DrawContext
 
 function MonitorDrawContext:init()
-    DrawContext.init(self)
+    self:super(DrawContext).init()
 end
 
 function MonitorDrawContext:getSize()
@@ -21,5 +21,5 @@ function MonitorDrawContext:setPixel(x, y)
 end
 
 function MonitorDrawContext:getPixel()
-    throw(UnsupportedOperationException.new("Cannot retrieve pixel data from monitor."))
+    throw(UnsupportedOperationException:new("Cannot retrieve pixel data from monitor."))
 end

@@ -7,7 +7,7 @@
 --@extends weegui.element.Element
 
 function Button:init(parent, x, y, w, h, text, bg, fg)
-    Element.init(self, parent, x, y, w, h)
+    self:super(Element).init(parent, x, y, w, h)
     self.bg = bg
     self.fg = fg
     self.text = cast(text or "", String)
@@ -45,5 +45,5 @@ function Button:paint(ctx)
         y = self.h
     end
     ctx:drawString(self.text, x, y)
-    Element.paint(self, ctx)
+    self:super(Element).paint(ctx)
 end

@@ -8,14 +8,14 @@ function Label:init(parent, x, y, text, bg, fg)
     self.text = cast(text or "", String)
     self.bg = bg or Color.WHITE
     self.fg = fg or Color.BLACK
-    Element.init(self, parent, x, y, self.text:length(), 1)
+    self:super(Element).init(parent, x, y, self.text:length(), 1)
 end
 
 function Label:paint(ctx)
     ctx.fg = self.fg
     ctx.bg = self.bg
     ctx:drawString(self.text, 1, 1)
-    Element.paint(self, ctx)
+    self:super(Element).paint(ctx)
 end
 
 function Label:setText(text)
@@ -25,5 +25,5 @@ function Label:setText(text)
 end
 
 function Label:onClick(button, x, y)
-    Element.onClick(self, button, x, y)
+    self:super(Element).onClick(button, x, y)
 end

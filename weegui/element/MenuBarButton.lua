@@ -6,11 +6,11 @@
 
 function MenuBarButton:init(parent, x, text, bg, fg)
     text = cast(text, String)
-    Button.init(self, parent, x, 1, text:length() + 1, 1, text, bg, fg)
+    self:super(Button).init(parent, x, 1, text:length() + 1, 1, text, bg, fg)
 end
 
 function MenuBarButton:onClick(button, x, y)
-    Button.onClick(self, button, x, y)
+    self:super(Button).onClick(button, x, y)
     if not self.menu then return end
     self.menu:setVisible(not self.menu.visible)
     if self.menu.visible then

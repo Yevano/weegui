@@ -10,7 +10,7 @@ Element.UNFOCUS = "ElementUnfocus"
 
 function Element:init(parent, x, y, w, h)
     if not GuiManager.instance then
-        GuiManager.new()
+        GuiManager:new()
     end
 
     if parent == nil then
@@ -32,10 +32,10 @@ function Element:init(parent, x, y, w, h)
     self.h = h
     self.repaintf = true
 
-    self.drawBuffer = Image.new(w, h)
+    self.drawBuffer = Image:new(w, h)
 
     self.listeners = { }
-    self.hooks = Array.new()
+    self.hooks = Array:new()
 end
 
 function Element:onClick(button, x, y)
@@ -89,8 +89,11 @@ function Element:contains(x2, y2)
 end
 
 function Element:addListener(eventType, listener)
+    if not self.listeners then
+        self.listeners = Array:new()
+    end
     if not self.listeners[eventType] then
-        self.listeners[eventType] = Array.new()
+        self.listeners[eventType] = Array:new()
     end
 
     self.listeners[eventType]:add(listener)

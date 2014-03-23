@@ -22,7 +22,7 @@ end
 function Image:getPixel(x, y)
     local col = self.buffer[x]
     y = y * 3
-    return Pixel.new(col[y], col[y + 1], col[y + 2])
+    return Pixel:new(col[y], col[y + 1], col[y + 2])
 end
 
 function Image:resize(w, h)
